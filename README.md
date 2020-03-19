@@ -3,4 +3,4 @@ Find an alternative to a food product. The source of the data is based on [Open 
 
 ## Requirements
 * Python 3
-* MySQL
+* PyMySQL
