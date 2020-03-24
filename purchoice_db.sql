@@ -2,5 +2,5 @@
 -- Database structure of purchoice
 --
 DROP DATABASE IF EXISTS purchoice;
-CREATE DATABASE purchoice CHARACTER SET utf8;
+CREATE DATABASE purchoice;
 USE purchoice;
