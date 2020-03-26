@@ -105,3 +105,7 @@ class Favorite(Base):
             self.product_id,
             self.product_substitut_id,
         )
+
+
+# Create a schema using metadata to issue CREATE TABLE statements
+Base.metadata.create_all(engine)
