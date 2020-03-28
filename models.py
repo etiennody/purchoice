@@ -2,8 +2,9 @@
 # coding: utf-8
 
 from sqlalchemy import create_engine
+from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Enum, Integer, String
+from sqlalchemy import Table, Column, Enum, Integer, String, ForeignKey
 
 # Engine configuration to connect database with PyMySQL
 engine = create_engine(
@@ -12,6 +13,22 @@ engine = create_engine(
 
 # Construct a base class for declarative class definitions
 Base = declarative_base()
+
+# Create an association for category and product in a ManyToMany relationship
+cat_prod_asso_table = Table(
+    "cat_prod_asso",
+    Base.metadata,
+    Column("category_id", Integer, ForeignKey("category.id")),
+    Column("product_id", Integer, ForeignKey("product.id")),
+)
+
+# Create an association for brand and product in a ManyToMany relationship
+brand_prod_asso_table = Table(
+    "brand_prod_asso",
+    Base.metadata,
+    Column("brand_id", Integer, ForeignKey("brand.id")),
+    Column("product_id", Integer, ForeignKey("product_id")),
+)
 
 
 # Details about category table to which is mapping
@@ -60,6 +77,8 @@ class Product(Base):
     additives = Column(String())
     ingredients_from_palm_oil_n = Column(Integer)
     traces = Column(String(100))
+    categories = relationship("Category", secondary="cat_prod_asso", backref=products)
+    brands = relationship("Brand", secondary="brand_prod_asso", backref=products)
 
     def __repr__(self):
         return (
@@ -82,8 +101,10 @@ class ProductStore(Base):
     __tablename__ = "product_store"
 
     id = Column(Integer, primary_key=True)
-    store_id = Column(Integer)
-    product_store_id = Column(Integer)
+    store_id = Column(Integer, ForeignKey("store.id"))
+    product_store_id = Column(Integer, ForeignKey("product.id"))
+    store = relationship("Store", backref="product_stores")
+    product_store = relationship("Product", backref="products")
 
     def __repr__(self):
         return "<ProductStore(store_id='%s', product_store_id='%s')>" % (
@@ -97,8 +118,10 @@ class Favorite(Base):
     __tablename__ = "favorite"
 
     id = Column(Integer, primary_key=True)
-    product_id = Column(Integer)
-    product_substitut_id = Column(Integer)
+    product_id = Column(Integer, ForeignKey("product.id"))
+    product_substitut_id = Column(Integer, ForeignKey("product_store.id"))
+    product = relationship("Product", backref="favorites")
+    product_substitut = relationship("Product", backref="favorite_substituts")
 
     def __repr__(self):
         return "<Favorite(product_id='%s', product_substitut_id='%s')>" % (
