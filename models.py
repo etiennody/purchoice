@@ -27,7 +27,7 @@ brand_prod_asso_table = Table(
     "brand_prod_asso",
     Base.metadata,
     Column("brand_id", Integer, ForeignKey("brand.id")),
-    Column("product_id", Integer, ForeignKey("product_id")),
+    Column("product_id", Integer, ForeignKey("product.id")),
 )
 
 
