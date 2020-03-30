@@ -8,7 +8,7 @@ from sqlalchemy import Table, Column, Enum, Integer, String, ForeignKey
 
 # Engine configuration to connect database with PyMySQL
 engine = create_engine(
-    "mysql+pymysql:purbeurre/purbeurre@localhost/purchoice", echo=True
+    "mysql+pymysql://purbeurre:purbeurre@localhost/purchoice", echo=True
 )
 
 # Construct a base class for declarative class definitions
