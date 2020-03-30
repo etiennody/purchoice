@@ -38,9 +38,6 @@ class Category(Base):
     id = Column(Integer, primary_key=True)
     category_name = Column(String(100))
 
-    def __repr__(self):
-        return "<Category(category_name='%s')>" % (self.category_name)
-
 
 # Details about store table to which is mapping
 class Store(Base):
@@ -49,9 +46,6 @@ class Store(Base):
     id = Column(Integer, primary_key=True)
     store_name = Column(String(100))
 
-    def __repr__(self):
-        return "<Store(store_name='%s')>" % (self.store_name)
-
 
 # Details about brand table to which is mapping
 class Brand(Base):
@@ -59,9 +53,6 @@ class Brand(Base):
 
     id = Column(Integer, primary_key=True)
     brand_name = Column(String(100))
-
-    def __repr__(self):
-        return "<Brand(brand_name='%s')>" % (self.brand_name)
 
 
 # Details about product table to which is mapping
@@ -80,21 +71,6 @@ class Product(Base):
     categories = relationship("Category", secondary="cat_prod_asso", backref=products)
     brands = relationship("Brand", secondary="brand_prod_asso", backref=products)
 
-    def __repr__(self):
-        return (
-            "<Product(product_name='%s', description='%s', url='%s', nutrition_grade_fr='%s', ingredients_text='%s', additives='%s', ingredients_from_palm_oil_n='%s', traces='%s')>"
-            % (
-                self.product_name,
-                self.description,
-                self.url,
-                self.nutrition_grade_fr,
-                self.ingredients_text,
-                self.additives,
-                self.ingredients_from_palm_oil_n,
-                self.traces,
-            )
-        )
-
 
 # Details about product_store table to which is mapping
 class ProductStore(Base):
@@ -106,12 +82,6 @@ class ProductStore(Base):
     store = relationship("Store", backref="product_stores")
     product_store = relationship("Product", backref="products")
 
-    def __repr__(self):
-        return "<ProductStore(store_id='%s', product_store_id='%s')>" % (
-            self.store_id,
-            self.product_store_id,
-        )
-
 
 # Details about favorite table to which is mapping
 class Favorite(Base):
@@ -122,12 +92,6 @@ class Favorite(Base):
     product_substitut_id = Column(Integer, ForeignKey("product_store.id"))
     product = relationship("Product", backref="favorites")
     product_substitut = relationship("Product", backref="favorite_substituts")
-
-    def __repr__(self):
-        return "<Favorite(product_id='%s', product_substitut_id='%s')>" % (
-            self.product_id,
-            self.product_substitut_id,
-        )
 
 
 # Create a schema using metadata to issue CREATE TABLE statements
