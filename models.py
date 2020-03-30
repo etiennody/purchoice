@@ -68,8 +68,8 @@ class Product(Base):
     additives = Column(String())
     ingredients_from_palm_oil_n = Column(Integer)
     traces = Column(String(100))
-    categories = relationship("Category", secondary="cat_prod_asso", backref=products)
-    brands = relationship("Brand", secondary="brand_prod_asso", backref=products)
+    categories = relationship("Category", secondary="cat_prod_asso", backref="products")
+    brands = relationship("Brand", secondary="brand_prod_asso", backref="products")
 
 
 # Details about product_store table to which is mapping
