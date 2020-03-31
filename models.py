@@ -34,7 +34,6 @@ brand_prod_asso_table = Table(
 # Details about category table to which is mapping
 class Category(Base):
     __tablename__ = "category"
-
     id = Column(Integer, primary_key=True)
     category_name = Column(String(100))
 
@@ -42,7 +41,6 @@ class Category(Base):
 # Details about store table to which is mapping
 class Store(Base):
     __tablename__ = "store"
-
     id = Column(Integer, primary_key=True)
     store_name = Column(String(100))
 
@@ -50,7 +48,6 @@ class Store(Base):
 # Details about brand table to which is mapping
 class Brand(Base):
     __tablename__ = "brand"
-
     id = Column(Integer, primary_key=True)
     brand_name = Column(String(100))
 
@@ -58,12 +55,11 @@ class Brand(Base):
 # Details about product table to which is mapping
 class Product(Base):
     __tablename__ = "product"
-
     id = Column(Integer, primary_key=True)
     product_name = Column(String(100))
     description = Column(String(1000))
     url = Column(String(500))
-    nutrition_grade_fr = Column(Enum)
+    nutrition_grade_fr = Column(Enum("A", "B", "C", "D", "E"))
     ingredients_text = Column(String(1000))
     additives = Column(String(500))
     ingredients_from_palm_oil_n = Column(Integer)
@@ -75,7 +71,6 @@ class Product(Base):
 # Details about product_store table to which is mapping
 class ProductStore(Base):
     __tablename__ = "product_store"
-
     id = Column(Integer, primary_key=True)
     store_id = Column(Integer, ForeignKey("store.id"))
     product_store_id = Column(Integer, ForeignKey("product.id"))
@@ -86,7 +81,6 @@ class ProductStore(Base):
 # Details about favorite table to which is mapping
 class Favorite(Base):
     __tablename__ = "favorite"
-
     id = Column(Integer, primary_key=True)
     product_id = Column(Integer, ForeignKey("product.id"))
     product_substitut_id = Column(Integer, ForeignKey("product_store.id"))
