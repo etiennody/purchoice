@@ -65,7 +65,7 @@ class Product(Base):
     url = Column(String(500))
     nutrition_grade_fr = Column(Enum)
     ingredients_text = Column(String(1000))
-    additives = Column(String())
+    additives = Column(String(500))
     ingredients_from_palm_oil_n = Column(Integer)
     traces = Column(String(100))
     categories = relationship("Category", secondary="cat_prod_asso", backref="products")
