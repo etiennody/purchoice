@@ -57,13 +57,13 @@ class Product(Base):
     __tablename__ = "product"
     id = Column(Integer, primary_key=True)
     product_name = Column(String(100))
-    description = Column(String(1000))
+    generic_name = Column(String(1000))
     url = Column(String(500))
     nutrition_grade_fr = Column(Enum("A", "B", "C", "D", "E"))
-    ingredients_text = Column(String(1000))
+    ingredients_text_with_allergens = Column(String(1000))
+    traces = Column(String(300))
     additives = Column(String(500))
     ingredients_from_palm_oil_n = Column(Integer)
-    traces = Column(String(100))
     categories = relationship("Category", secondary="cat_prod_asso", backref="products")
     brands = relationship("Brand", secondary="brand_prod_asso", backref="products")
 
