@@ -59,7 +59,7 @@ class Product(Base):
     product_name = Column(String(100))
     generic_name = Column(String(1000))
     url = Column(String(500))
-    nutrition_grade_fr = Column(Enum("A", "B", "C", "D", "E"))
+    nutrition_grade_fr = Column(Enum("a", "b", "c", "d", "e"))
     ingredients_text_with_allergens = Column(String(1000))
     traces = Column(String(300))
     additives = Column(String(500))
