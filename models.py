@@ -1,15 +1,9 @@
 #! /usr/bin/env python3
 # coding: utf-8
 
-from sqlalchemy import create_engine
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Table, Column, Enum, Integer, String, ForeignKey
-
-# Engine configuration to connect database with PyMySQL
-engine = create_engine(
-    "mysql+pymysql://purbeurre:purbeurre@localhost/purchoice", echo=True
-)
 
 # Construct a base class for declarative class definitions
 Base = declarative_base()
@@ -86,7 +80,3 @@ class Favorite(Base):
     product_substitut_id = Column(Integer, ForeignKey("product_store.id"))
     product = relationship("Product", backref="favorites")
     product_substitut = relationship("Product", backref="favorite_substituts")
-
-
-# Create a schema using metadata to issue CREATE TABLE statements
-Base.metadata.create_all(engine)
