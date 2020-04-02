@@ -12,6 +12,7 @@ black = "*"
 requests = "*"
 sqlalchemy = "*"
 pymysql = "*"
+cryptography = "*"
 
 [requires]
 python_version = "3.8"
