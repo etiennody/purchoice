@@ -28,7 +28,7 @@ To run this application locally:
         
     * PURCHOICE_DBURL=mysql+pymysql://`<user>`:`<password>`@localhost/purchoice
 
-    We’ll need credentials to connect to the database. As per best practice configuration should be stored in the environment, not the code. Put the bellow env variables at the application repository, making sure to update the variables for your environment.
+    We’ll need credentials to connect to the database. As per best practice configuration should be stored in the environment, not the code. Put the bellow environment variable at the application repository, making sure to update the variable for your environment.
 
 * Install the requirements:
     ```
