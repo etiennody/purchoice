@@ -35,3 +35,15 @@ To run this application locally:
     pipenv install
     ```
 
+* Get products from Open Food Facts:
+    ```
+    python import_off.py
+    ```
+
+* Run the Purchoice application:
+    ````
+    python app.py
+    ````
+
+* Enjoy!
+
