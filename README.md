@@ -11,24 +11,24 @@ Find an alternative to a food product. A program that would interact with the [O
 ## Setup
 To run this application locally:
 
-    - Create a virtual env. First, install pipenv:
+* Create a virtual env. First, install pipenv:
         
-        pip install --user pipenv
+    pip install --user pipenv
 
-    - Clone / create the application repository:
+* Clone / create the application repository:
 
-        git clone https://github.com/etiennody/purchoice && cd purchoice
+    git clone https://github.com/etiennody/purchoice && cd purchoice
 
-    - Create a database called purchoice (use Mysql)
+* Create a database called purchoice (use Mysql)
 
-    - Add env variables to .env:
+* Add env variables to .env:
         
-        - DATABASE_URL = 'mysql+pymysql://<user>:<password>@localhost/purchoice' (use your own credentials for <user> and <password>)
+    * PURCHOICE_DBURL=mysql+pymysql://<user>:<password>@localhost/purchoice (use your own credentials for <user> and <password>)
 
-    We’ll need credentials to connect to the database. As per best practice configuration should be stored in the environment, not the code. Put the bellow env variables at the application repository, making sure to update the variables for your environment.
+We’ll need credentials to connect to the database. As per best practice configuration should be stored in the environment, not the code. Put the bellow env variables at the application repository, making sure to update the variables for your environment.
 
-    - Install the requirements:
+* Install the requirements:
 
-        pipenv install
+    pipenv install
 
 
