@@ -18,7 +18,7 @@ To run this application locally:
 
 * Clone / create the application repository:
     ```
-    git clone https://github.com/etiennody/purchoice && cd purchoice
+    git clone https://github.com/etiennody/purchoice.git && cd purchoice
     ````
 
 * Create a database called purchoice (use Mysql)
