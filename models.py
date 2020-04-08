@@ -56,10 +56,14 @@ class Product(Base):
     nutrition_grade_fr = Column(Enum("a", "b", "c", "d", "e"))
     ingredients_text_with_allergens = Column(String(1000))
     traces = Column(String(300))
-    additives = Column(String(500))
+    additives_n = Column(Integer)
     ingredients_from_palm_oil_n = Column(Integer)
-    categories = relationship("Category", secondary="cat_prod_asso", backref="products")
-    brands = relationship("Brand", secondary="brand_prod_asso", backref="products")
+    categories = relationship(
+        "Category", secondary="cat_prod_asso", backref="products"
+    )
+    brands = relationship(
+        "Brand", secondary="brand_prod_asso", backref="products"
+    )
 
 
 # Details about product_store table to which is mapping
