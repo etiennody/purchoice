@@ -1,7 +1,8 @@
 #! usr/bin/python3
 # coding: utf-8
 
-from models import Base, Category, Store, Brand, Product, ProductStore, Favorite
+from models import Base
+from models import Category, Store, Brand, Product, ProductStore, Favorite
 from os import environ
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
