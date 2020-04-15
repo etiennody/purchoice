@@ -3,7 +3,7 @@
 
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Table, Column, Enum, Integer, String, ForeignKey
+from sqlalchemy import Table, Column, Enum, Integer, String, Text, ForeignKey
 
 # Construct a base class for declarative class definitions
 Base = declarative_base()
@@ -51,15 +51,17 @@ class Product(Base):
     __tablename__ = "product"
     id = Column(Integer, primary_key=True)
     product_name = Column(String(100))
-    generic_name = Column(String(1000))
+    generic_name = Column(Text())
     url = Column(String(500))
     nutrition_grade_fr = Column(Enum("a", "b", "c", "d", "e"))
-    ingredients_text_with_allergens = Column(String(1000))
-    traces = Column(String(300))
-    additives = Column(String(500))
-    ingredients_from_palm_oil_n = Column(Integer)
-    categories = relationship("Category", secondary="cat_prod_asso", backref="products")
-    brands = relationship("Brand", secondary="brand_prod_asso", backref="products")
+    ingredients_text_fr = Column(Text())
+    additives_n = Column(Integer)
+    categories = relationship(
+        "Category", secondary="cat_prod_asso", backref="products"
+    )
+    brands = relationship(
+        "Brand", secondary="brand_prod_asso", backref="products"
+    )
 
 
 # Details about product_store table to which is mapping
