@@ -4,7 +4,7 @@
 from models import Base
 from models import Category, Store, Brand, Product, ProductStore
 from os import environ
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, desc
 from sqlalchemy.orm import sessionmaker
 
 
@@ -24,7 +24,7 @@ class PurchoiceDatabase:
         a SQLAlchemy ORM session factory bound to this engine,
         and a base class from models definitions.
         """
-        self.engine = create_engine(self._db_url, echo=True)
+        self.engine = create_engine(self._db_url, echo=False)
         # create all tables
         Base.metadata.create_all(self.engine)
         # create a Session
@@ -44,8 +44,22 @@ class PurchoiceDatabase:
         self.session.commit()
 
     def get_products(self):
-        """Extract product object"""
-        return self.session.query(Product)
+        """This method can access all products object from database
+        In this way, we can extract only 10 products randomly
+        """
+        return self.session.query(Product).limit(10)
+
+    def get_healthy_products(self):
+        """Extract products object from database
+        We found healthy products where nutrtion grade is upper than B
+        """
+        return self.session.query(Product). \
+            filter(Product.nutrition_grade_fr <= "b"). \
+            order_by(desc(
+                (Product.nutrition_grade_fr) and (Product.additives_n)
+                )
+            ). \
+            limit(10)
 
     def add_product(self, product):
         """Insert product and commit the record in database"""
