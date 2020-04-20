@@ -33,22 +33,26 @@ class ImportOff:
             return json.loads(response.content)["products"]
 
     def import_by_category(self):
-        self.db.add_category(self.category)
+
         products = self.get_off()
-        for product in products:
-            self.db.add_product(product)
-            self.db.add_brand(product.get("brands"))
-            self.db.add_store(product.get("stores"))
+        try:
+            for cat_instances in self.category.split(","):
+                self.db.add_category(cat_instances)
+                for product in products:
+                    for store_instances in product.get("stores").split(","):
+                        self.db.add_store(store_instances)
+                    for brand_instances in product.get("brands").split(","):
+                        self.db.add_brand(brand_instances)
+                    self.db.add_product(product)
+            self.db.add_category_by_product(product)
+
+        except Exception:
+            pass
 
 
-def main():
+if __name__ == "__main__":
     reset = PurchoiceDatabase()
     reset.truncate_tables()
     for category in CATEGORY_SELECTED:
         import_off = ImportOff(category)
         import_off.import_by_category()
-        continue
-
-
-if __name__ == "__main__":
-    main()
