@@ -2,7 +2,7 @@
 # coding: utf-8
 
 from models import Base
-from models import Category, Store, Brand, Product, ProductStore
+from models import Category, Store, Brand, Product#, ProductStore
 from os import environ
 from sqlalchemy import create_engine, desc
 from sqlalchemy.orm import sessionmaker
@@ -17,6 +17,7 @@ class PurchoiceDatabase:
     def __init__(self):
         self._db_url = environ.get("PURCHOICE_DBURL")
         self.session = self._create_session()
+        self.category = Category()
 
     def _create_session(self):
         """
@@ -24,7 +25,7 @@ class PurchoiceDatabase:
         a SQLAlchemy ORM session factory bound to this engine,
         and a base class from models definitions.
         """
-        self.engine = create_engine(self._db_url, echo=False)
+        self.engine = create_engine(self._db_url, echo=True)
         # create all tables
         Base.metadata.create_all(self.engine)
         # create a Session
@@ -40,7 +41,7 @@ class PurchoiceDatabase:
         self.session.query(Store).delete()
         self.session.query(Brand).delete()
         self.session.query(Product).delete()
-        self.session.query(ProductStore).delete()
+        # self.session.query(ProductStore).delete()
         self.session.commit()
 
     def get_products(self):
@@ -51,7 +52,7 @@ class PurchoiceDatabase:
 
     def get_healthy_products(self):
         """Extract products object from database
-        We found healthy products where nutrtion grade is upper than B
+        We found healthy products where nutrition grade is upper than B
         """
         return self.session.query(Product). \
             filter(Product.nutrition_grade_fr <= "b"). \
@@ -84,6 +85,10 @@ class PurchoiceDatabase:
         self.session.add(Category(category_name=category))
         self.session.commit()
 
+    def add_category_by_product(self, product_name):
+        self.category.category_name.prod_categories.append(product_name)
+        self.session.commit()
+
     def get_brands(self):
         """Extract brand object"""
         return self.session.query(Brand).all()
@@ -99,5 +104,8 @@ class PurchoiceDatabase:
 
     def add_store(self, stores):
         """Insert store and commit the record in database"""
-        self.session.add(Store(store_name=stores))
+        self.session.add(Store(store_name=stores.strip().upper()))
         self.session.commit()
+
+    def add_product_store(self):
+        """Insert produc_store and commit the record in database"""
