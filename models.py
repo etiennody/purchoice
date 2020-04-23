@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 # coding: utf-8
 
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, backref
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Table, Column, Enum, Integer, String, Text, ForeignKey
 
@@ -9,76 +9,132 @@ from sqlalchemy import Table, Column, Enum, Integer, String, Text, ForeignKey
 Base = declarative_base()
 
 # Create an association for category and product in a ManyToMany relationship
-cat_prod_asso_table = Table(
+cat_prod_asso = Table(
     "cat_prod_asso",
     Base.metadata,
-    Column("category_id", Integer, ForeignKey("category.id")),
-    Column("product_id", Integer, ForeignKey("product.id")),
+    Column(
+        "category_id",
+        Integer,
+        ForeignKey("category.category_id", ondelete="CASCADE")
+    ),
+    Column(
+        "product_id",
+        Integer,
+        ForeignKey("product.product_id", ondelete="CASCADE")),
+    )
+
+# Create an association for brand and product in a ManyToMany relationship
+brand_prod_asso = Table(
+    "brand_prod_asso",
+    Base.metadata,
+    Column(
+        "brand_id",
+        Integer,
+        ForeignKey("brand.brand_id", ondelete="CASCADE")
+    ),
+    Column(
+        "product_id",
+        Integer,
+        ForeignKey("product.product_id", ondelete="CASCADE")
+    ),
 )
 
 # Create an association for brand and product in a ManyToMany relationship
-brand_prod_asso_table = Table(
-    "brand_prod_asso",
+store_prod_asso = Table(
+    "store_prod_asso",
     Base.metadata,
-    Column("brand_id", Integer, ForeignKey("brand.id")),
-    Column("product_id", Integer, ForeignKey("product.id")),
+    Column(
+        "store_id",
+        Integer,
+        ForeignKey("store.store_id", ondelete="CASCADE")
+    ),
+    Column(
+        "product_id",
+        Integer,
+        ForeignKey("product.product_id", ondelete="CASCADE")
+    ),
 )
 
 
 # Details about category table to which is mapping
 class Category(Base):
     __tablename__ = "category"
-    id = Column(Integer, primary_key=True)
-    category_name = Column(String(100))
+    category_id = Column(Integer, primary_key=True)
+    category_name = Column(
+        String(500), server_default="default"
+    )
+
+    def __repr__(self):
+        return "<Category %r>" % self.category_name
 
 
 # Details about store table to which is mapping
 class Store(Base):
     __tablename__ = "store"
-    id = Column(Integer, primary_key=True)
-    store_name = Column(String(100))
+    store_id = Column(Integer, primary_key=True)
+    store_name = Column(
+        String(100), server_default="default"
+    )
+
+    def __repr__(self):
+        return "<Store %r>" % self.store_name
 
 
 # Details about brand table to which is mapping
 class Brand(Base):
     __tablename__ = "brand"
-    id = Column(Integer, primary_key=True)
-    brand_name = Column(String(100))
+    brand_id = Column(Integer, primary_key=True)
+    brand_name = Column(
+        String(100), server_default="default"
+    )
+
+    def __repr__(self):
+        return "<Brand %r>" % self.brand_name
 
 
 # Details about product table to which is mapping
 class Product(Base):
     __tablename__ = "product"
-    id = Column(Integer, primary_key=True)
+    product_id = Column(Integer, primary_key=True)
     product_name = Column(String(100))
     generic_name = Column(Text())
     url = Column(String(500))
-    nutrition_grade_fr = Column(Enum("a", "b", "c", "d", "e"))
+    nutrition_grade_fr = Column(
+        Enum("a", "b", "c", "d", "e", name="nutrition_grades")
+    )
     ingredients_text_fr = Column(Text())
     additives_n = Column(Integer)
     categories = relationship(
-        "Category", secondary="cat_prod_asso", backref="products"
+        "Category",
+        secondary=cat_prod_asso,
+        backref=backref("products", lazy="dynamic")
     )
     brands = relationship(
-        "Brand", secondary="brand_prod_asso", backref="products"
+        "Brand",
+        secondary=brand_prod_asso,
+        backref=backref("products", lazy="dynamic")
+    )
+    stores = relationship(
+        "Store",
+        secondary=store_prod_asso,
+        backref=backref("products", lazy="dynamic")
     )
 
-
-# Details about product_store table to which is mapping
-class ProductStore(Base):
-    __tablename__ = "product_store"
-    id = Column(Integer, primary_key=True)
-    store_id = Column(Integer, ForeignKey("store.id"))
-    product_store_id = Column(Integer, ForeignKey("product.id"))
-    store = relationship("Store", backref="product_stores")
-    product_store = relationship("Product", backref="products")
+    def __repr__(self):
+        return "<Product %r>" % self.product_name
 
 
 # Details about favorite table to which is mapping
-class Favorite(Base):
-    __tablename__ = "favorite"
-    id = Column(Integer, primary_key=True)
-    product_id = Column(Integer, ForeignKey("product.id"))
-    product_substitut_id = Column(Integer, ForeignKey("product_store.id"))
-    product = relationship("Product", backref="favorites")
-    product_substitut = relationship("Product", backref="favorite_substituts")
+# class Favorite(Base):
+#     __tablename__ = "favorite"
+#     favorite_id = Column(Integer, primary_key=True)
+#     product_id = Column(Integer, ForeignKey("product.product_id"))
+#     product_substitut_id = Column(
+#           Integer,
+#           ForeignKey("product_store.product_store_id")
+#     )
+#     product = relationship("Product", backref="favorites")
+#     product_substitut = relationship(
+#           "Product",
+#           backref="favorite_substituts"
+#      )

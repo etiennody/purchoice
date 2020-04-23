@@ -2,9 +2,9 @@
 # coding: utf-8
 
 from models import Base
-from models import Category, Store, Brand, Product, ProductStore
+from models import Category, Store, Brand, Product
 from os import environ
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, desc
 from sqlalchemy.orm import sessionmaker
 
 
@@ -31,6 +31,19 @@ class PurchoiceDatabase:
         self.create_session = sessionmaker(bind=self.engine)
         return self.create_session()
 
+    def get_or_create(self, model, **kwargs):
+        """
+        get_or_create method is for looking up an object,
+        giving a set of parameters, creating one if necessary.
+        """
+        instance = self.session.query(model).filter_by(**kwargs).first()
+
+        if not instance:
+            instance = model(**kwargs)
+            self.session.add(instance)
+
+        return instance
+
     def truncate_tables(self):
         """
         Delete all the records in the tables
@@ -40,26 +53,40 @@ class PurchoiceDatabase:
         self.session.query(Store).delete()
         self.session.query(Brand).delete()
         self.session.query(Product).delete()
-        self.session.query(ProductStore).delete()
         self.session.commit()
 
     def get_products(self):
-        """Extract product object"""
-        return self.session.query(Product)
+        """This method can access all products object from database
+        In this way, we can extract only 10 products randomly
+        """
+        return self.session.query(Product).limit(10)
 
-    def add_product(self, product):
+    def get_healthy_products(self):
+        """Extract products object from database
+        We found healthy products where nutrition grade is upper than B
+        """
+        return self.session.query(Product). \
+            filter(Product.nutrition_grade_fr <= "b"). \
+            order_by(desc(
+                (Product.nutrition_grade_fr) and (Product.additives_n)
+                )
+            ). \
+            limit(10)
+
+    def add_product(self, product_dict):
         """Insert product and commit the record in database"""
-        self.session.add(
-            Product(
-                product_name=product.get("product_name"),
-                generic_name=product.get("generic_name"),
-                url=product.get("url"),
-                nutrition_grade_fr=product.get("nutrition_grade_fr"),
-                ingredients_text_fr=product.get("ingredients_text"),
-                additives_n=product.get("additives_n"),
+
+        product = Product(
+            product_name=product_dict.get("product_name"),
+            generic_name=product_dict.get("generic_name"),
+            url=product_dict.get("url"),
+            nutrition_grade_fr=product_dict.get("nutrition_grade_fr"),
+            ingredients_text_fr=product_dict.get("ingredients_text"),
+            additives_n=product_dict.get("additives_n")
             )
-        )
+        self.session.add(product)
         self.session.commit()
+        return product
 
     def get_categories(self):
         """Extract category object"""
@@ -67,8 +94,12 @@ class PurchoiceDatabase:
 
     def add_category(self, category):
         """Insert category and commit the record in database"""
-        self.session.add(Category(category_name=category))
+        c = self.get_or_create(
+            Category,
+            category_name=category.strip()
+            )
         self.session.commit()
+        return c
 
     def get_brands(self):
         """Extract brand object"""
@@ -76,8 +107,13 @@ class PurchoiceDatabase:
 
     def add_brand(self, brands):
         """Insert brand and commit the record in database"""
-        self.session.add(Brand(brand_name=brands))
+
+        b = self.get_or_create(
+            Brand,
+            brand_name=brands
+        )
         self.session.commit()
+        return b
 
     def get_stores(self):
         """Extract store object"""
@@ -85,5 +121,9 @@ class PurchoiceDatabase:
 
     def add_store(self, stores):
         """Insert store and commit the record in database"""
-        self.session.add(Store(store_name=stores))
+        s = self.get_or_create(
+            Store,
+            store_name=stores.strip().upper()
+        )
         self.session.commit()
+        return s
