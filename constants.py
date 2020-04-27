@@ -2,11 +2,11 @@
 # coding: utf-8
 
 # define list categories for purchoice app
-CATEGORY_SELECTED = (
+CATEGORY_SELECTED = [
     "conserves",
     "epiceries",
     "produits-a-tartiner",
     "plats-prepares",
     "produits-laitiers",
     "snacks",
-)
+]
