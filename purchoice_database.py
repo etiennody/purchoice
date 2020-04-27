@@ -4,8 +4,10 @@
 from models import Base
 from models import Category, Store, Brand, Product
 from os import environ
-from sqlalchemy import create_engine, desc
+from sqlalchemy import create_engine, desc, asc
 from sqlalchemy.orm import sessionmaker
+# from constants import CATEGORY_SELECTED
+# from sqlalchemy.sql import exists, func
 
 
 class PurchoiceDatabase:
@@ -24,7 +26,7 @@ class PurchoiceDatabase:
         a SQLAlchemy ORM session factory bound to this engine,
         and a base class from models definitions.
         """
-        self.engine = create_engine(self._db_url, echo=True)
+        self.engine = create_engine(self._db_url, echo=False)
         # create all tables
         Base.metadata.create_all(self.engine)
         # create a Session
@@ -55,23 +57,21 @@ class PurchoiceDatabase:
         self.session.query(Product).delete()
         self.session.commit()
 
-    def get_products(self):
+    def get_all_products(self):
         """This method can access all products object from database
         In this way, we can extract only 10 products randomly
         """
-        return self.session.query(Product).limit(10)
+        return self.session.query(Product).all()
 
     def get_healthy_products(self):
         """Extract products object from database
         We found healthy products where nutrition grade is upper than B
         """
         return self.session.query(Product). \
-            filter(Product.nutrition_grade_fr <= "b"). \
-            order_by(desc(
-                (Product.nutrition_grade_fr) and (Product.additives_n)
-                )
-            ). \
-            limit(10)
+            filter(Product.nutrition_grade_fr == "a"). \
+            filter(Product.additives_n == 0). \
+            order_by(desc(Product.nutrition_grade_fr)). \
+            order_by(asc(Product.additives_n)).limit(15)
 
     def add_product(self, product_dict):
         """Insert product and commit the record in database"""
@@ -89,14 +89,39 @@ class PurchoiceDatabase:
         return product
 
     def get_categories(self):
-        """Extract category object"""
-        return self.session.query(Category).all()
+        """Extract a list of category object"""
+        return list(self.session.query(Category.category_name.label('name_label')).limit(10))
+
+        # for category_name in self.session.query(Category.category_name):
+        #     return category_name
+
+        # stmt = exists().where(Category.category_id == Product.product_id)
+        # for name in list(self.session.query(Category.category_name).filter(stmt)):
+        #     return name
+
+        # return self.session.query(Category). \
+        # order_by(desc(Category.category_name)).all()
+
+        # return self.session.query(Category). \
+        # filter(Category.category_name == "epiceries"). \
+        # filter(Category.category_name == "produits-a-tartiner"). \
+        # filter(Category.category_name == "plats-prepares"). \
+        # filter(Category.category_name == "produits-laitiers"). \
+        # filter(Category.category_name == "snacks").\
+        
+        # return self.query.filter(
+        # Category.category_name.in_(CATEGORY_SELECTED))
+        # filter(Category.category_name == "SNACKS"). \
+
+    # def get_categories_selected(self):
+    #     cat_selected = self.get_categories()
+    #     return [cat for cat in cat_selected if cat_selected in CATEGORY_SELECTED]
 
     def add_category(self, category):
         """Insert category and commit the record in database"""
         c = self.get_or_create(
             Category,
-            category_name=category.strip()
+            category_name=category.strip().upper()
             )
         self.session.commit()
         return c
@@ -107,7 +132,6 @@ class PurchoiceDatabase:
 
     def add_brand(self, brands):
         """Insert brand and commit the record in database"""
-
         b = self.get_or_create(
             Brand,
             brand_name=brands
@@ -127,3 +151,9 @@ class PurchoiceDatabase:
         )
         self.session.commit()
         return s
+
+    def saved_products(self):
+        """saved_prducts method store alternatives products"""
+        print(
+            "Page de sauvegarde des substituts en cours de construction"
+        )
