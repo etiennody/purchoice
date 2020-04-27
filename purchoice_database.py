@@ -61,7 +61,7 @@ class PurchoiceDatabase:
         """This method can access all products object from database
         In this way, we can extract only 10 products randomly
         """
-        return self.session.query(Product).all()
+        return self.session.query(Product).join(Category.category_name).all()
 
     def get_healthy_products(self):
         """Extract products object from database
@@ -75,7 +75,6 @@ class PurchoiceDatabase:
 
     def add_product(self, product_dict):
         """Insert product and commit the record in database"""
-
         product = Product(
             product_name=product_dict.get("product_name"),
             generic_name=product_dict.get("generic_name"),
@@ -89,33 +88,13 @@ class PurchoiceDatabase:
         return product
 
     def get_categories(self):
-        """Extract a list of category object"""
-        return list(self.session.query(Category.category_name.label('name_label')).limit(10))
+        """Extract a list of categories object"""
+        return self.session.query(Category).limit(10)
 
-        # for category_name in self.session.query(Category.category_name):
-        #     return category_name
-
-        # stmt = exists().where(Category.category_id == Product.product_id)
-        # for name in list(self.session.query(Category.category_name).filter(stmt)):
-        #     return name
-
-        # return self.session.query(Category). \
-        # order_by(desc(Category.category_name)).all()
-
-        # return self.session.query(Category). \
-        # filter(Category.category_name == "epiceries"). \
-        # filter(Category.category_name == "produits-a-tartiner"). \
-        # filter(Category.category_name == "plats-prepares"). \
-        # filter(Category.category_name == "produits-laitiers"). \
-        # filter(Category.category_name == "snacks").\
-        
-        # return self.query.filter(
-        # Category.category_name.in_(CATEGORY_SELECTED))
-        # filter(Category.category_name == "SNACKS"). \
-
-    # def get_categories_selected(self):
-    #     cat_selected = self.get_categories()
-    #     return [cat for cat in cat_selected if cat_selected in CATEGORY_SELECTED]
+    def get_product_by_category(self, category_id):
+        category = self.session.query(Category). \
+            filter(Category.category_id == category_id).one()
+        return category.products
 
     def add_category(self, category):
         """Insert category and commit the record in database"""
@@ -152,8 +131,8 @@ class PurchoiceDatabase:
         self.session.commit()
         return s
 
-    def saved_products(self):
-        """saved_prducts method store alternatives products"""
-        print(
-            "Page de sauvegarde des substituts en cours de construction"
-        )
+    # def saved_products(self):
+    #     """saved_prducts method store alternatives products"""
+    #     print(
+    #         "Page de sauvegarde des substituts en cours de construction"
+    #     )
