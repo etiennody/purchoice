@@ -50,6 +50,7 @@ class ImportOff:
         products = self.get_off(category)
         products = products if isinstance(products, list) else products.items()
         print("L'importation des données a démarré. Veuillez patientez... ")
+
         for product in products:
             try:
                 p = self.db.add_product(product)
@@ -62,6 +63,7 @@ class ImportOff:
                 for store in product.get("stores").split(","):
                     s = self.db.add_store(store)
                     p.stores.append(s)
+
             except Exception:
                 pass
 
@@ -73,3 +75,4 @@ if __name__ == "__main__":
     for category in CATEGORY_SELECTED:
         import_off.import_by_category(category)
     print("Merci d'avoir patienté. Vous pouvez lancer l'application !")
+
