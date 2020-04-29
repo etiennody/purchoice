@@ -31,18 +31,11 @@ class Controller:
                 self.view.homepage()
             elif self.page == "list_categories":
                 self.view.list_categories(self.db.get_categories())
-            elif self.page == "list_products":
-                self.view.list_products(self.db.get_healthy_products())
-            elif self.page == "list_products_category":
+            elif self.page == "list_products_by_category":
                 products = self.db.get_product_by_category(
                     category_id=self.choice
                 )
-                self.view.list_products(products)
-            # elif self.page == "show_product":
-            #     product = get_product_by_id(self.choice)
-            #     self.view.show_product(product)
-            # elif self.page == "search":
-            #     self.view.search_product()
-            # elif self.page == "search_results":
-            #     results = search_products(self.choice)
-            #     self.view.list_products(results)
+                self.view.list_products_by_category(products)
+            elif self.page == "show_product":
+                product = self.db.get_product_by_id(product_id=self.choice)
+                self.view.show_product(product)
