@@ -63,7 +63,6 @@ class ImportOff:
                 for store in product.get("stores").split(","):
                     s = self.db.add_store(store)
                     p.stores.append(s)
-
             except Exception:
                 pass
 
@@ -75,4 +74,3 @@ if __name__ == "__main__":
     for category in CATEGORY_SELECTED:
         import_off.import_by_category(category)
     print("Merci d'avoir patienté. Vous pouvez lancer l'application !")
-
