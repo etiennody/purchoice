@@ -6,8 +6,7 @@ from models import Category, Store, Brand, Product
 from os import environ
 from sqlalchemy import create_engine, desc, asc
 from sqlalchemy.orm import sessionmaker
-# from constants import CATEGORY_SELECTED
-# from sqlalchemy.sql import exists, func
+from sqlalchemy.sql import func
 
 
 class PurchoiceDatabase:
@@ -57,21 +56,23 @@ class PurchoiceDatabase:
         self.session.query(Product).delete()
         self.session.commit()
 
-    def get_all_products(self):
-        """This method can access all products object from database
-        In this way, we can extract only 10 products randomly
-        """
-        return self.session.query(Product).join(Category.category_name).all()
-
-    def get_healthy_products(self):
+    def get_healthy_products(self, product_id):
         """Extract products object from database
-        We found healthy products where nutrition grade is upper than B
+        We found healthy products where nutrition grade is equal than a
+        and any presence of additives.
         """
         return self.session.query(Product). \
-            filter(Product.nutrition_grade_fr == "a"). \
+            join(Category.category_id). \
+            filter(Product.product_id != product_id). \
+            filter(Product.nutrition_grade_fr <= "b"). \
             filter(Product.additives_n == 0). \
             order_by(desc(Product.nutrition_grade_fr)). \
-            order_by(asc(Product.additives_n)).limit(15)
+            order_by(asc(Product.additives_n))
+
+    def get_product_by_id(self, product_id):
+        product = self.session.query(Product). \
+            filter(Product.product_id == product_id).limit(10)
+        return product
 
     def add_product(self, product_dict):
         """Insert product and commit the record in database"""
@@ -89,11 +90,12 @@ class PurchoiceDatabase:
 
     def get_categories(self):
         """Extract a list of categories object"""
-        return self.session.query(Category).limit(10)
+        return self.session.query(Category).order_by(func.rand()).limit(10)
 
     def get_product_by_category(self, category_id):
         category = self.session.query(Category). \
-            filter(Category.category_id == category_id).one()
+            filter(Category.category_id == category_id). \
+            order_by(func.rand()).one()
         return category.products
 
     def add_category(self, category):
@@ -105,10 +107,6 @@ class PurchoiceDatabase:
         self.session.commit()
         return c
 
-    def get_brands(self):
-        """Extract brand object"""
-        return self.session.query(Brand).all()
-
     def add_brand(self, brands):
         """Insert brand and commit the record in database"""
         b = self.get_or_create(
@@ -118,10 +116,6 @@ class PurchoiceDatabase:
         self.session.commit()
         return b
 
-    def get_stores(self):
-        """Extract store object"""
-        return self.session.query(Store).all()
-
     def add_store(self, stores):
         """Insert store and commit the record in database"""
         s = self.get_or_create(
@@ -130,9 +124,3 @@ class PurchoiceDatabase:
         )
         self.session.commit()
         return s
-
-    # def saved_products(self):
-    #     """saved_prducts method store alternatives products"""
-    #     print(
-    #         "Page de sauvegarde des substituts en cours de construction"
-    #     )

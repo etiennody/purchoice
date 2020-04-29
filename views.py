@@ -1,7 +1,6 @@
 #! usr/bin/python3
 # coding: utf-8
 
-# from constants import CATEGORY_SELECTED
 from purchoice_database import PurchoiceDatabase
 
 import os
@@ -37,6 +36,7 @@ class AppView:
             self.controller.page = "saved_products"
 
     def list_categories(self, categories):
+        """list_categories method displays a list of categories."""
         for category in categories:
             print("\n", f"{category.category_id} - {category.category_name}")
 
@@ -51,10 +51,11 @@ class AppView:
         elif choice == "a":
             self.controller.page = "homepage"
         else:
-            self.controller.page = "list_products_category"
+            self.controller.page = "list_products_by_category"
             self.controller.choice = choice
 
-    def list_products(self, products):
+    def list_products_by_category(self, products):
+        """list_products_by_category method displays a list of products by categories."""
         for product in products:
             print(f"{product.product_id} - {product.product_name}")
         print("\n 'a' pour la Page d'accueil")
@@ -69,31 +70,25 @@ class AppView:
             self.controller.page = "show_product"
             self.controller.choice = choice
 
-    # def show_product(self, product, stores, brands):
-    #     print(
-    #         f"Nom du produit: {product.product_name} \
-    #         Marque : {product.brands}"
-    #     )
-    #     print(f"Description: {product.generic_name}")
-    #     print(f"Lien page web: {product.url}")
-    #     print(f"Magasin: {product.store}")
-    #     print("-------------------------------------------")
-    #     print(f"NutriScore: {product.nutrition_grade_fr}")
-    #     print(f"Ingredients: {product.ingredients_text_fr}")
-    #     print(f"Nombre d'additifs: {product.additives_n}")
-    #     print("\n 'a' pour la Page d'accueil")
-    #     print("\n 'q' pour Quitter")
-    #     choice = input("Selectionnez votre choix: ")
-    #     if choice == "q":
-    #         self.controller.run_app = False
-    #     elif choice == "a":
-    #         self.controller.page = "homepage"
-
-    # def search_product(self):
-    #     self.controller.page = "search_results"
-    #     self.controller.choice = input(
-    #         "\n *** Entrer le nom du produit recherché: "
-    #     )
-
-    # def saved_products(self):
-    #     print("Page de sauvegarde de produits en cours de construction")
+    def show_product(self, product):
+        """show_product method displays a product selected by the user with the product id."""
+        for prd in product:
+            print(f"Nom du produit : {prd.product_name} \
+                Marque : {prd.brands}")
+            print(f"Description : {prd.generic_name}")
+            print(f"Lien page web : {prd.url}")
+            print(f"Magasin : {prd.stores}")
+            print("----------------------------------------------------")
+            print(f"NutriScore : {prd.nutrition_grade_fr}")
+            print(f"Ingredients : {prd.ingredients_text_fr}")
+            print(f"Nombre d'additifs : {prd.additives_n}")
+        print("\n 'a' pour la Page d'accueil")
+        print("\n 'q' pour Quitter")
+        choice = input("\n Voulez-vous un substitut à ce produit ? [o/n] ")
+        if choice == "q":
+            self.controller.run_app = False
+        elif choice == "a" or choice == "n":
+            self.controller.page = "homepage"
+        else:
+            self.controller.page = "show_substitut"
+            self.choice = choice
