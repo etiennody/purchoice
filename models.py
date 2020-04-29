@@ -77,7 +77,7 @@ class Store(Base):
     )
 
     def __repr__(self):
-        return "<Store %r>" % self.store_name
+        return "%s" % self.store_name
 
 
 # Details about brand table to which is mapping
@@ -89,7 +89,7 @@ class Brand(Base):
     )
 
     def __repr__(self):
-        return "<Brand %r>" % self.brand_name
+        return "%s" % self.brand_name
 
 
 # Details about product table to which is mapping
@@ -122,19 +122,3 @@ class Product(Base):
 
     def __repr__(self):
         return "<Product %r>" % self.product_name
-
-
-# Details about favorite table to which is mapping
-# class Favorite(Base):
-#     __tablename__ = "favorite"
-#     favorite_id = Column(Integer, primary_key=True)
-#     product_id = Column(Integer, ForeignKey("product.product_id"))
-#     product_substitut_id = Column(
-#           Integer,
-#           ForeignKey("product_store.product_store_id")
-#     )
-#     product = relationship("Product", backref="favorites")
-#     product_substitut = relationship(
-#           "Product",
-#           backref="favorite_substituts"
-#      )
