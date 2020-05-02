@@ -21,7 +21,7 @@ cat_prod_asso = Table(
         "product_id",
         Integer,
         ForeignKey("product.product_id", ondelete="CASCADE")),
-    )
+)
 
 # Create an association for brand and product in a ManyToMany relationship
 brand_prod_asso = Table(
@@ -77,7 +77,7 @@ class Store(Base):
     )
 
     def __repr__(self):
-        return "%s" % self.store_name
+        return self.store_name
 
 
 # Details about brand table to which is mapping
@@ -89,7 +89,7 @@ class Brand(Base):
     )
 
     def __repr__(self):
-        return "%s" % self.brand_name
+        return self.brand_name
 
 
 # Details about product table to which is mapping
@@ -122,3 +122,12 @@ class Product(Base):
 
     def __repr__(self):
         return "<Product %r>" % self.product_name
+
+
+class Favorite(Base):
+    """Details about favorite table to which is mapping"""
+
+    __tablename__ = "favorite"
+    favorite_id = Column(Integer, primary_key=True)
+    product_id = Column(Integer, ForeignKey("product.product_id"))
+    product_substitute_id = Column(Integer, ForeignKey("product.product_id"))
