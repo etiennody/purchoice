@@ -8,7 +8,6 @@ from purchoice_database import PurchoiceDatabase
 
 
 class Controller:
-
     def __init__(self):
         try:
             self.db = PurchoiceDatabase()
@@ -38,4 +37,19 @@ class Controller:
                 self.view.list_products_by_category(products)
             elif self.page == "show_product":
                 product = self.db.get_product_by_id(product_id=self.choice)
-                self.view.show_product(product)
+                substitute = self.db.get_substitute_for_product(self.choice)
+                is_saved = True
+                if not substitute:
+                    is_saved = False
+                    substitute = self.db.get_healthy_products(product)
+                self.view.show_product(product, substitute, is_saved)
+            elif self.page == "save_substitute":
+                self.db.save_substitute(self.choice[0], self.choice[1])
+                print("product saved...")
+                self.page = "homepage"
+            else:
+                print("Oops ! Page introuvée...")
+                self.run_app = False
+            # elif self.page == "show_substitute":
+            #     substitute = self.db.get_healthy_products(product_id=self.choice)
+            #     self.view.show_substitute(substitute)
