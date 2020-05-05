@@ -3,8 +3,8 @@
 
 import sys
 
-from views import AppView
 from purchoice_database import PurchoiceDatabase
+from views import AppView
 
 
 class Controller:
@@ -44,12 +44,10 @@ class Controller:
                     substitute = self.db.get_healthy_products(product)
                 self.view.show_product(product, substitute, is_saved)
             elif self.page == "save_substitute":
-                self.db.save_substitute(self.choice[0], self.choice[1])
-                print("product saved...")
+                self.db.save_substitute(product, substitute)
+                print("Parfait ! Produit et substitut sont sauvegardés...")
                 self.page = "homepage"
+                
             else:
                 print("Oops ! Page introuvée...")
                 self.run_app = False
-            # elif self.page == "show_substitute":
-            #     substitute = self.db.get_healthy_products(product_id=self.choice)
-            #     self.view.show_substitute(substitute)
