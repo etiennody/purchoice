@@ -2,11 +2,13 @@
 # coding: utf-8
 
 from os import environ
-from models import Base
-from models import Category, Store, Brand, Product, Favorite, cat_prod_asso
-from sqlalchemy import create_engine, desc, asc, or_
+
+from sqlalchemy import create_engine, literal, or_
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.sql import func
+
+from models import (Base, Brand, Category, Favorite, Product, Store,
+                    cat_prod_asso)
 
 
 class PurchoiceDatabase:
@@ -66,16 +68,15 @@ class PurchoiceDatabase:
             join(cat_prod_asso). \
             filter(cat_prod_asso.c.category_id.in_(category_ids)).\
             filter(Product.product_id != product.product_id). \
-            filter(or_(
-                Product.nutrition_grade_fr < product.nutrition_grade_fr,
-                Product.additives_n < product.additives_n)
-            ). \
+            filter(or_(Product.nutrition_grade_fr < product.nutrition_grade_fr, Product.additives_n < product.additives_n)). \
             order_by(Product.nutrition_grade_fr). \
             order_by(Product.additives_n)
         return substitute.first()
 
     def get_substitute_for_product(self, product_id):
-        return None
+        substituted = self.session.query(literal(True)). \
+            filter(Favorite.product_id == product_id)
+        print(substituted is not None)
 
     def get_product_by_id(self, product_id):
         product = self.session.query(Product). \
@@ -134,12 +135,17 @@ class PurchoiceDatabase:
         return s
 
     def save_substitute(self, product, substitute):
-        favorite = Favorite(
-            product_id=product,
-            product_substitute_id=substitute
+        """
+        Insert product_id and product_substitute_id
+        and commit the record in database
+        """
+        fav = self.get_or_create(
+            Favorite,
+            product_id=product.product_id,
+            product_substitute_id=substitute.product_id
         )
-        self.session.add(favorite)
         self.session.commit()
+        return fav
 
     # def get_favorites(self):
     #     """
