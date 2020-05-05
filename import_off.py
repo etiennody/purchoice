@@ -3,8 +3,9 @@
 
 """Download data from Open Food Facts API."""
 
-import requests
 import json
+
+import requests
 
 from constants import CATEGORY_SELECTED
 from purchoice_database import PurchoiceDatabase
@@ -49,7 +50,8 @@ class ImportOff:
         """
         products = self.get_off(category)
         products = products if isinstance(products, list) else products.items()
-        print("L'importation des données a démarré. Veuillez patientez... ")
+
+        print("Importation des données en cours. Patientez...")
 
         for product in products:
             try:
