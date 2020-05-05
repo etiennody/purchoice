@@ -1,9 +1,9 @@
 #! /usr/bin/env python3
 # coding: utf-8
 
-from sqlalchemy.orm import relationship, backref
+from sqlalchemy import Column, Enum, ForeignKey, Integer, String, Table, Text
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Table, Column, Enum, Integer, String, Text, ForeignKey
+from sqlalchemy.orm import backref, relationship
 
 # Construct a base class for declarative class definitions
 Base = declarative_base()
@@ -56,8 +56,8 @@ store_prod_asso = Table(
 )
 
 
-# Details about category table to which is mapping
 class Category(Base):
+    """Details about category table to which is mapping"""
     __tablename__ = "category"
     category_id = Column(Integer, primary_key=True)
     category_name = Column(
@@ -68,8 +68,8 @@ class Category(Base):
         return "<Category %r>" % self.category_name
 
 
-# Details about store table to which is mapping
 class Store(Base):
+    """Details about store table to which is mapping"""
     __tablename__ = "store"
     store_id = Column(Integer, primary_key=True)
     store_name = Column(
@@ -80,8 +80,8 @@ class Store(Base):
         return self.store_name
 
 
-# Details about brand table to which is mapping
 class Brand(Base):
+    """Details about brand table to which is mapping"""
     __tablename__ = "brand"
     brand_id = Column(Integer, primary_key=True)
     brand_name = Column(
@@ -92,8 +92,8 @@ class Brand(Base):
         return self.brand_name
 
 
-# Details about product table to which is mapping
 class Product(Base):
+    """Details about product table to which is mapping"""
     __tablename__ = "product"
     product_id = Column(Integer, primary_key=True)
     product_name = Column(String(100))
@@ -119,14 +119,18 @@ class Product(Base):
         secondary=store_prod_asso,
         backref=backref("products", lazy="dynamic")
     )
+    favorites = relationship(
+        "Favorite",
+        primaryjoin="and_(Product.product_id == Favorite.product_id, Product.product_id == Favorite.product_substitute_id)",
+        backref=backref("products")
+    )
 
     def __repr__(self):
-        return "<Product %r>" % self.product_name
+        return self.product_name
 
 
 class Favorite(Base):
     """Details about favorite table to which is mapping"""
-
     __tablename__ = "favorite"
     favorite_id = Column(Integer, primary_key=True)
     product_id = Column(Integer, ForeignKey("product.product_id"))
