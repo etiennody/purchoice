@@ -1,9 +1,9 @@
 #! usr/bin/python3
 # coding: utf-8
 
-from purchoice_database import PurchoiceDatabase
-
 import os
+
+from purchoice_database import PurchoiceDatabase
 
 
 class AppView:
