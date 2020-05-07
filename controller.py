@@ -45,9 +45,10 @@ class Controller:
                 self.view.show_product(product, substitute, is_saved)
             elif self.page == "save_substitute":
                 self.db.save_substitute(product, substitute)
-                print("Parfait ! Produit et substitut sont sauvegardés...")
                 self.page = "homepage"
-                
+            elif self.page == "list_favorites":
+                favorites = self.db.get_favorites()
+                self.view.list_favorites(favorites)
             else:
                 print("Oops ! Page introuvée...")
                 self.run_app = False

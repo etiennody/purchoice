@@ -34,14 +34,14 @@ class AppView:
         if choice == "1":
             self.controller.page = "list_categories"
         if choice == "2":
-            self.controller.page = "saved_products"
+            self.controller.page = "list_favorites"
 
     def list_categories(self, categories):
         """list_categories method displays a list of categories."""
         print("\n VOICI UNE LISTE DE CATEGORIE D'ALIMENTS A SELECTIONNER :")
         print("\n --------------------------------")
         for category in categories:
-            print("\n", f"{category.category_id} - {category.category_name}")
+            print(f"{category.category_id} - {category.category_name}")
         print("\n --------------------------------")
         print("\n Tapez 'a' pour la Page d'accueil")
         print("\n Tapez 'q' pour Quitter")
@@ -52,7 +52,7 @@ class AppView:
             self.controller.run_app = False
         elif choice == "a":
             self.controller.page = "homepage"
-        else:
+        elif choice.isnumeric():
             self.controller.page = "list_products_by_category"
             self.controller.choice = choice
 
@@ -75,7 +75,7 @@ class AppView:
             self.controller.run_app = False
         elif choice == "a":
             self.controller.page = "homepage"
-        else:
+        elif choice.isnumeric():
             self.controller.page = "show_product"
             self.controller.choice = choice
 
@@ -126,7 +126,25 @@ class AppView:
         print(f" Ingredients : {product.ingredients_text_fr}")
         print(f" Nombre d'additifs : {product.additives_n}")
 
-    # def list_favorites(self, favorites):
-    #     """list_products_by_category method displays a list of products by categories."""
-    #     for fav in favorites:
-    #         print(fav)
+    def list_favorites(self, favorites):
+        """
+        list_products_by_category method displays
+        a list of products by categories.
+        """
+        print("\n VOICI LA LISTE DES ALIMENTS SUBSTITUES :")
+        print("\n --------------------------------")
+        if not favorites:
+            print("\n La liste des aliments substitués est vide. Veuillez d'abord effectuer une recherche et sauvegardez le résultat.")
+        else:
+            for fav in favorites:
+                print(fav)
+        print("\n --------------------------------")
+        print("\n 'a' pour la Page d'accueil")
+        print("\n 'q' pour Quitter")
+        choice = input(
+            "\n Tapez 'a' pour la Page d'accueil ou 'q' pour quitter : "
+        )
+        if choice == "q":
+            self.controller.run_app = False
+        if choice == "a":
+            self.controller.page = "homepage"

@@ -119,11 +119,6 @@ class Product(Base):
         secondary=store_prod_asso,
         backref=backref("products", lazy="dynamic")
     )
-    favorites = relationship(
-        "Favorite",
-        primaryjoin="and_(Product.product_id == Favorite.product_id, Product.product_id == Favorite.product_substitute_id)",
-        backref=backref("products")
-    )
 
     def __repr__(self):
         return self.product_name
@@ -135,3 +130,15 @@ class Favorite(Base):
     favorite_id = Column(Integer, primary_key=True)
     product_id = Column(Integer, ForeignKey("product.product_id"))
     product_substitute_id = Column(Integer, ForeignKey("product.product_id"))
+
+    product = relationship(
+        "Product",
+        foreign_keys=[product_id]
+    )
+    product_substitute = relationship(
+        "Product",
+        foreign_keys=[product_substitute_id]
+    )
+
+    def __repr__(self):
+        return f"\n . '{self.product}' est remplacé par [{self.product_substitute}]."
