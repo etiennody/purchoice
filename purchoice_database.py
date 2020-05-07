@@ -5,7 +5,6 @@ from os import environ
 
 from sqlalchemy import create_engine, literal, or_
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy.sql import func
 
 from models import (Base, Brand, Category, Favorite, Product, Store,
                     cat_prod_asso)
@@ -76,7 +75,8 @@ class PurchoiceDatabase:
     def get_substitute_for_product(self, product_id):
         substituted = self.session.query(literal(True)). \
             filter(Favorite.product_id == product_id)
-        print(substituted is not None)
+        if substituted is None:
+            return substituted
 
     def get_product_by_id(self, product_id):
         product = self.session.query(Product). \
@@ -99,13 +99,12 @@ class PurchoiceDatabase:
 
     def get_categories(self):
         """Extract a list of categories object"""
-        return self.session.query(Category).order_by(func.rand()).limit(10)
+        return self.session.query(Category).all()
 
     def get_product_by_category(self, category_id):
         category = self.session.query(Category). \
-            filter(Category.category_id == category_id). \
-            order_by(func.rand()).one()
-        return category.products.limit(15)
+            filter(Category.category_id == category_id).one()
+        return category.products
 
     def add_category(self, category):
         """Insert category and commit the record in database"""
@@ -139,18 +138,18 @@ class PurchoiceDatabase:
         Insert product_id and product_substitute_id
         and commit the record in database
         """
-        fav = self.get_or_create(
-            Favorite,
+        fav = Favorite(
             product_id=product.product_id,
             product_substitute_id=substitute.product_id
         )
+        self.session.add(fav)
         self.session.commit()
         return fav
 
-    # def get_favorites(self):
-    #     """
-    #     show_favorites method display a list of substituted produts
-    #     of the Favorite table.
-    #     """
-    #     favorites = self.session.query(Favorite).all()
-    #     return favorites
+    def get_favorites(self):
+        """
+        show_favorites method display a list of substituted produts
+        of the Favorite table.
+        """
+        favorites = self.session.query(Favorite).all()
+        return favorites
