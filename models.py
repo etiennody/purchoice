@@ -141,4 +141,5 @@ class Favorite(Base):
     )
 
     def __repr__(self):
-        return f"\n . '{self.product}' est remplacé par [{self.product_substitute}]."
+        return f"\n . '{self.product}' est remplacé par " \
+            f"[{self.product_substitute}]."

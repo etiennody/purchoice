@@ -27,7 +27,8 @@ class AppView:
         print("\n 3 - Quitter le programme")
 
         choice = input(
-            "\n Veuillez sélectionner votre choix (entre 1 et 3) et valider avec 'Entrée': "
+            "\n Veuillez sélectionner votre choix (entre 1 et 3) "
+            "et valider avec 'Entrée': "
         )
         if choice == "3":
             self.controller.run_app = False
@@ -46,7 +47,8 @@ class AppView:
         print("\n Tapez 'a' pour la Page d'accueil")
         print("\n Tapez 'q' pour Quitter")
         choice = input(
-            "\n Entrez un identifiant (entre 0 et 3000) correspondant à une catégorie et valider avec 'Entrée' : "
+            "\n Entrez un identifiant (entre 1 et 645) correspondant "
+            "à une catégorie et valider avec 'Entrée' : "
         )
         if choice == "q":
             self.controller.run_app = False
@@ -69,7 +71,8 @@ class AppView:
         print("\n 'a' pour la Page d'accueil")
         print("\n 'q' pour Quitter")
         choice = input(
-            "\n Entrez un identifiant (entre 0 et 3000) correspondant à un produit et valider avec 'Entrée' : "
+            "\n Entrez un identifiant correspondant "
+            "à un produit et valider avec 'Entrée' : "
         )
         if choice == "q":
             self.controller.run_app = False
@@ -90,21 +93,33 @@ class AppView:
             print("\n VOICI VOTRE SUBSTITUT :")
             self.print_product(substitute)
         else:
-            print("\n Malheureusement, nous n'avons aucun substituts à vous proposer...")
+            print(
+                "\n Malheureusement, nous n'avons aucun substituts "
+                "à vous proposer..."
+            )
         print("\n --------------------------------")
         print("\n 'a' pour la Page d'accueil")
         print("\n 'q' pour Quitter")
         if not is_saved:
-            choice = input("\n Voulez-vous sauvegarder votre substitut ? [o/n] ")
+            choice = input(
+                "\n Voulez-vous sauvegarder votre substitut ? "
+                "[o/n] "
+            )
             if choice == "o":
                 self.controller.page = "save_substitute"
                 self.controller.choice = (product, substitute)
             if choice == "n":
                 self.controller.page = "homepage"
         else:
-            print("\n Votre substitut est déjà sauvegardé dans votre liste de produits recherchés.")
+            print(
+                "\n Votre substitut est déjà sauvegardé "
+                "dans votre liste de produits recherchés."
+            )
             print("\n Retournez à la Page d'accueil et tapez '2'.")
-            choice = input("\n Allez à la Page d'accueil 'a' ou Quitter 'q' : ")
+            choice = input(
+                "\n Allez à la Page d'accueil 'a' "
+                "ou Quitter 'q' : "
+            )
         if choice == "q":
             self.controller.run_app = False
         elif choice == "a" or choice == "n":
@@ -134,7 +149,11 @@ class AppView:
         print("\n VOICI LA LISTE DES ALIMENTS SUBSTITUES :")
         print("\n --------------------------------")
         if not favorites:
-            print("\n La liste des aliments substitués est vide. Veuillez d'abord effectuer une recherche et sauvegardez le résultat.")
+            print(
+                "\n La liste des aliments substitués est vide. "
+                "Veuillez d'abord effectuer une recherche "
+                "et sauvegardez le résultat."
+            )
         else:
             for fav in favorites:
                 print(fav)

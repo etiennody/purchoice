@@ -67,7 +67,9 @@ class PurchoiceDatabase:
             join(cat_prod_asso). \
             filter(cat_prod_asso.c.category_id.in_(category_ids)).\
             filter(Product.product_id != product.product_id). \
-            filter(or_(Product.nutrition_grade_fr < product.nutrition_grade_fr, Product.additives_n < product.additives_n)). \
+            filter(or_(
+                Product.nutrition_grade_fr < product.nutrition_grade_fr,
+                Product.additives_n < product.additives_n)). \
             order_by(Product.nutrition_grade_fr). \
             order_by(Product.additives_n)
         return substitute.first()

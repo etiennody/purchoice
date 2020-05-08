@@ -8,6 +8,9 @@ from views import AppView
 
 
 class Controller:
+    """Controller class  centralizes the main
+    commands of the Purchoice application.
+    """
     def __init__(self):
         try:
             self.db = PurchoiceDatabase()
@@ -23,6 +26,8 @@ class Controller:
             sys.exit()
 
     def run(self):
+        """Run method is the main loop of the application.
+        """
         self.view.clear_screen()
         while self.run_app:
             self.view.clear_screen()
