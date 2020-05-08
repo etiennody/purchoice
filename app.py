@@ -3,7 +3,7 @@
 
 """Purchoice - Find an alternative to your food product !"""
 
-from controller import Controller
+from src.purchoice.controller import Controller
 
 if __name__ == "__main__":
     Controller().run()

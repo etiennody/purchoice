@@ -3,7 +3,7 @@
 
 import os
 
-from purchoice_database import PurchoiceDatabase
+from src.purchoice.purchoice_database import PurchoiceDatabase
 
 
 class AppView:
@@ -143,8 +143,8 @@ class AppView:
 
     def list_favorites(self, favorites):
         """
-        list_products_by_category method displays
-        a list of products by categories.
+        list_favorites method displays
+        a list of saved substitutes by product.
         """
         print("\n VOICI LA LISTE DES ALIMENTS SUBSTITUES :")
         print("\n --------------------------------")

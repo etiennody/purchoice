@@ -6,8 +6,8 @@ from os import environ
 from sqlalchemy import create_engine, literal, or_
 from sqlalchemy.orm import sessionmaker
 
-from models import (Base, Brand, Category, Favorite, Product, Store,
-                    cat_prod_asso)
+from src.purchoice.models import (Base, Brand, Category, Favorite, Product,
+                                  Store, cat_prod_asso)
 
 
 class PurchoiceDatabase:

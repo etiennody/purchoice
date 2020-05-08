@@ -3,8 +3,8 @@
 
 import sys
 
-from purchoice_database import PurchoiceDatabase
-from views import AppView
+from src.purchoice.purchoice_database import PurchoiceDatabase
+from src.purchoice.views import AppView
 
 
 class Controller:
@@ -20,8 +20,8 @@ class Controller:
             self.choice = None
         except Exception:
             print(
-                "Erreur d'accès à la base données. \
-            Veuillez vérifier votre système de configuration."
+                "Erreur d'accès à la base données. "
+                "Veuillez vérifier votre système de configuration."
             )
             sys.exit()
 
