@@ -6,7 +6,7 @@ Find an alternative to a food product. A program that would interact with the [O
 ## Requirements
 * Python 3
 * PyMySQL
-* Sqlalchemy
+* SQLAlchemy
 
 ## Setup
 To run this application locally:
@@ -24,7 +24,7 @@ To run this application locally:
 * Create a database called purchoice (use Mysql)
 
 
-* Add environment variable to .env:
+* Add environment variable to .env file:
         
     * PURCHOICE_DBURL=mysql+pymysql://`<user>`:`<password>`@localhost/purchoice
 
@@ -33,6 +33,11 @@ To run this application locally:
 * Install the requirements:
     ```
     pipenv install
+    ```
+
+* Activate the pipenv shell. If a .env file is present, $ pipenv shell and $ pipenv run will automatically load it, for you:
+    ```
+    pipenv shell
     ```
 
 * Get products from Open Food Facts:
@@ -46,4 +51,3 @@ To run this application locally:
     ````
 
 * Enjoy!
-
