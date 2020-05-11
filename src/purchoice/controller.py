@@ -8,8 +8,8 @@ from src.purchoice.views import AppView
 
 
 class Controller:
-    """Controller class  centralizes the main
-    commands of the Purchoice application.
+    """Controller class centralizes the main commands
+    and functionalities of the Purchoice application.
     """
     def __init__(self):
         try:
