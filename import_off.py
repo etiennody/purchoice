@@ -7,21 +7,26 @@ import json
 
 import requests
 
-from constants import CATEGORY_SELECTED
-from purchoice_database import PurchoiceDatabase
+from src.purchoice.constants import CATEGORY_SELECTED
+from src.purchoice.purchoice_database import PurchoiceDatabase
 
 
 class ImportOff:
-    """ImportOff class download all the data from OpenFood Facts API"""
-
+    """ImportOff class downloads data from Open Food Facts API."""
     def __init__(self, db):
         self.url = "https://fr.openfoodfacts.org//cgi/search.pl?"
         self.db = db
 
     def get_url_params(self, category):
-        """
-        get_url_params method helps to define with more precisely
-        the request to the url of the Open Food Facts API.
+        """get_urls_params helps to define more precisely
+        the request to Open Food Facts API.
+
+        Arguments:
+            category {string} -- a name of category.
+
+        Returns:
+            dictionnary -- contains parameters to complete
+            the request to Open Food Facts API.
         """
         return {
             "action": "process",
@@ -34,19 +39,27 @@ class ImportOff:
         }
 
     def get_off(self, category):
-        """
-        get_off method make a request to the web page of Open Food Facts,
-        and load data in json if the return status code is successful
+        """get_off method makes a request to the web page of Open Food Facts,
+        and load data in json if the return status code is successful.
+
+        Arguments:
+            category {string} -- a category name.
+
+        Returns:
+            dictionnary -- Deserialize an bytearray instance containing
+            a JSON document to a Python object as early as products.
         """
         response = requests.get(self.url, params=self.get_url_params(category))
         if response.status_code == 200:
             return json.loads(response.content)["products"]
 
     def import_by_category(self, category):
-        """
-        import_by_category method try to insert
+        """import_by_category method try to insert
         products, categories, brands and stores data
-        for each product by category in the database .
+        for each product by category in the database.
+
+        Arguments:
+            category {string} -- a category name.
         """
         products = self.get_off(category)
         products = products if isinstance(products, list) else products.items()

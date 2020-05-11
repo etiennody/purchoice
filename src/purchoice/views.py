@@ -3,10 +3,13 @@
 
 import os
 
-from purchoice_database import PurchoiceDatabase
+from src.purchoice.purchoice_database import PurchoiceDatabase
 
 
 class AppView:
+    """class AppView provide a means of bundling data and functionality
+    for the visual appearance of Purchoice application.
+    """
     def __init__(self, controller):
         self.controller = controller
         self.db = PurchoiceDatabase()
@@ -18,7 +21,8 @@ class AppView:
         os.system("cls" if os.name == "nt" else "clear")
 
     def homepage(self):
-        """homepage method displays the main menu of the application."""
+        """homepage method displays the main menu of the application.
+        """
         print(
             "\n --PURCHOICE-- Trouvez une alternative saine à votre produit !"
             )
@@ -27,7 +31,8 @@ class AppView:
         print("\n 3 - Quitter le programme")
 
         choice = input(
-            "\n Veuillez sélectionner votre choix (entre 1 et 3) et valider avec 'Entrée': "
+            "\n Veuillez sélectionner votre choix (entre 1 et 3) "
+            "et valider avec 'Entrée': "
         )
         if choice == "3":
             self.controller.run_app = False
@@ -37,7 +42,11 @@ class AppView:
             self.controller.page = "list_favorites"
 
     def list_categories(self, categories):
-        """list_categories method displays a list of categories."""
+        """list_categories method displays a list of categories.
+
+        Arguments:
+            categories {list} -- a list of categories from Category table.
+        """
         print("\n VOICI UNE LISTE DE CATEGORIE D'ALIMENTS A SELECTIONNER :")
         print("\n --------------------------------")
         for category in categories:
@@ -46,7 +55,8 @@ class AppView:
         print("\n Tapez 'a' pour la Page d'accueil")
         print("\n Tapez 'q' pour Quitter")
         choice = input(
-            "\n Entrez un identifiant (entre 0 et 3000) correspondant à une catégorie et valider avec 'Entrée' : "
+            "\n Entrez un identifiant (entre 1 et 645) correspondant "
+            "à une catégorie et valider avec 'Entrée' : "
         )
         if choice == "q":
             self.controller.run_app = False
@@ -57,9 +67,11 @@ class AppView:
             self.controller.choice = choice
 
     def list_products_by_category(self, products):
-        """
-        list_products_by_category method displays
+        """list_products_by_category method displays
         a list of products by categories.
+
+        Arguments:
+            products {list} -- a list from Product table.
         """
         print("\n VOICI UNE LISTE DE PRODUITS A SELECTIONNER :")
         print("\n --------------------------------")
@@ -69,7 +81,8 @@ class AppView:
         print("\n 'a' pour la Page d'accueil")
         print("\n 'q' pour Quitter")
         choice = input(
-            "\n Entrez un identifiant (entre 0 et 3000) correspondant à un produit et valider avec 'Entrée' : "
+            "\n Entrez un identifiant correspondant "
+            "à un produit et valider avec 'Entrée' : "
         )
         if choice == "q":
             self.controller.run_app = False
@@ -80,9 +93,13 @@ class AppView:
             self.controller.choice = choice
 
     def show_product(self, product, substitute, is_saved):
-        """
-        show_product method displays a product
+        """show_product method displays a product
         selected by the user with the product id.
+
+        Arguments:
+            product {instance} -- a product selected.
+            substitute {instance} -- a suggested substitute.
+            is_saved {bool} -- state of the substitute.
         """
         print("\n VOICI VOTRE PRODUIT :")
         self.print_product(product)
@@ -90,27 +107,44 @@ class AppView:
             print("\n VOICI VOTRE SUBSTITUT :")
             self.print_product(substitute)
         else:
-            print("\n Malheureusement, nous n'avons aucun substituts à vous proposer...")
+            print(
+                "\n Malheureusement, nous n'avons aucun substituts "
+                "à vous proposer..."
+            )
         print("\n --------------------------------")
         print("\n 'a' pour la Page d'accueil")
         print("\n 'q' pour Quitter")
         if not is_saved:
-            choice = input("\n Voulez-vous sauvegarder votre substitut ? [o/n] ")
+            choice = input(
+                "\n Voulez-vous sauvegarder votre substitut ? "
+                "[o/n] "
+            )
             if choice == "o":
                 self.controller.page = "save_substitute"
                 self.controller.choice = (product, substitute)
             if choice == "n":
                 self.controller.page = "homepage"
         else:
-            print("\n Votre substitut est déjà sauvegardé dans votre liste de produits recherchés.")
+            print(
+                "\n Votre substitut est déjà sauvegardé "
+                "dans votre liste de produits recherchés."
+            )
             print("\n Retournez à la Page d'accueil et tapez '2'.")
-            choice = input("\n Allez à la Page d'accueil 'a' ou Quitter 'q' : ")
+            choice = input(
+                "\n Allez à la Page d'accueil 'a' "
+                "ou Quitter 'q' : "
+            )
         if choice == "q":
             self.controller.run_app = False
         elif choice == "a" or choice == "n":
             self.controller.page = "homepage"
 
     def print_product(self, product):
+        """print_product method displays details of a product.
+
+        Arguments:
+            product {instance} -- a product selected.
+        """
         brands = ", ".join([str(b) for b in product.brands])
         stores = ", ".join([str(s) for s in product.stores])
         print(" --------------------------------")
@@ -127,14 +161,21 @@ class AppView:
         print(f" Nombre d'additifs : {product.additives_n}")
 
     def list_favorites(self, favorites):
-        """
-        list_products_by_category method displays
-        a list of products by categories.
+        """list_favorites method displays
+        a list of saved substitutes by products.
+
+        Arguments:
+            favorites {list} -- a list of saved products
+            with their substitutes.
         """
         print("\n VOICI LA LISTE DES ALIMENTS SUBSTITUES :")
         print("\n --------------------------------")
         if not favorites:
-            print("\n La liste des aliments substitués est vide. Veuillez d'abord effectuer une recherche et sauvegardez le résultat.")
+            print(
+                "\n La liste des aliments substitués est vide. "
+                "Veuillez d'abord effectuer une recherche "
+                "et sauvegardez le résultat."
+            )
         else:
             for fav in favorites:
                 print(fav)

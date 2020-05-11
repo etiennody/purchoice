@@ -57,7 +57,15 @@ store_prod_asso = Table(
 
 
 class Category(Base):
-    """Details about category table to which is mapping"""
+    """Details about category table to which is mapping.
+
+    Arguments:
+        Base {sqlalchemy.ext.declarative.api.DeclarativeMeta}
+         -- a Base class generated from metadata.
+
+    Returns:
+        __repr__ -- a representation from class category with its name.
+    """
     __tablename__ = "category"
     category_id = Column(Integer, primary_key=True)
     category_name = Column(
@@ -69,7 +77,15 @@ class Category(Base):
 
 
 class Store(Base):
-    """Details about store table to which is mapping"""
+    """Details about store table to which is mapping.
+
+    Arguments:
+        Base {sqlalchemy.ext.declarative.api.DeclarativeMeta}
+        -- a Base class generated from metadata.
+
+    Returns:
+        string -- a store's name with __repr__.
+    """
     __tablename__ = "store"
     store_id = Column(Integer, primary_key=True)
     store_name = Column(
@@ -81,7 +97,15 @@ class Store(Base):
 
 
 class Brand(Base):
-    """Details about brand table to which is mapping"""
+    """Details about brand table to which is mapping.
+
+    Arguments:
+        Base {sqlalchemy.ext.declarative.api.DeclarativeMeta}
+        -- a Base class generated from metadata.
+
+    Returns:
+        string -- a brand's name with __repr__.
+    """
     __tablename__ = "brand"
     brand_id = Column(Integer, primary_key=True)
     brand_name = Column(
@@ -93,7 +117,15 @@ class Brand(Base):
 
 
 class Product(Base):
-    """Details about product table to which is mapping"""
+    """Details about product table to which is mapping.
+
+    Arguments:
+        Base {sqlalchemy.ext.declarative.api.DeclarativeMeta}
+        -- a Base class generated from metadata.
+
+    Returns:
+        string -- a product's name with __repr__.
+    """
     __tablename__ = "product"
     product_id = Column(Integer, primary_key=True)
     product_name = Column(String(100))
@@ -125,7 +157,15 @@ class Product(Base):
 
 
 class Favorite(Base):
-    """Details about favorite table to which is mapping"""
+    """Details about favorite table to which is mapping.
+
+    Arguments:
+        Base {sqlalchemy.ext.declarative.api.DeclarativeMeta}
+        -- a Base class generated from metadata.
+
+    Returns:
+        string -- once sentence for saved substitutes with __repr__.
+    """
     __tablename__ = "favorite"
     favorite_id = Column(Integer, primary_key=True)
     product_id = Column(Integer, ForeignKey("product.product_id"))
@@ -141,4 +181,5 @@ class Favorite(Base):
     )
 
     def __repr__(self):
-        return f"\n . '{self.product}' est remplacé par [{self.product_substitute}]."
+        return f"\n . '{self.product}' est remplacé par " \
+            f"[{self.product_substitute}]."

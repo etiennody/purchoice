@@ -3,11 +3,14 @@
 
 import sys
 
-from purchoice_database import PurchoiceDatabase
-from views import AppView
+from src.purchoice.purchoice_database import PurchoiceDatabase
+from src.purchoice.views import AppView
 
 
 class Controller:
+    """Controller class centralizes the main commands
+    and functionalities of the Purchoice application.
+    """
     def __init__(self):
         try:
             self.db = PurchoiceDatabase()
@@ -17,12 +20,14 @@ class Controller:
             self.choice = None
         except Exception:
             print(
-                "Erreur d'accès à la base données. \
-            Veuillez vérifier votre système de configuration."
+                "Erreur d'accès à la base données. "
+                "Veuillez vérifier votre système de configuration."
             )
             sys.exit()
 
     def run(self):
+        """Run method is the main loop of the application.
+        """
         self.view.clear_screen()
         while self.run_app:
             self.view.clear_screen()
